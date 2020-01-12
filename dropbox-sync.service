@@ -1,0 +1,12 @@
+[Unit]
+Description=Dropbox backup sync service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 /etc/dropbox-sync/dropbox_sync_watcher.py
+ExecStop=/usr/bin/env python3 /etc/dropbox-sync/dropbox_sync_sender.py
+Restart=always
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

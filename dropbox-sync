@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+service_name="dropbox-sync"
+prefix="/etc"
+
+function enable {
+    sudo systemctl daemon-reload
+    sudo systemctl enable $service_name
+}
+
+function disable {
+    sudo systemctl stop $service_name
+    sudo systemctl disable $service_name
+    sudo systemctl daemon-reload
+    sudo systemctl reset-failed
+}
+
+function install {
+    case "$1" in
+        --prefix=*)
+            prefix=`echo $1 | cut -d "=" -f2`
+            ;;
+        "")
+            ;;
+        *)
+            echo "Unknown option $1"
+            usage
+            ;;
+    esac
+
+    sudo pip3 install inotify
+    sudo pip3 install pandas
+    sudo pip3 install pyyaml
+    sudo pip3 install jsonschema
+    sudo pip3 install dropbox
+
+    ret=1
+    while [ $ret -ne 0 ]; do
+        access_token=$(systemd-ask-password "Enter Dropbox Access Token: ")
+        python3 test_connection.py $access_token
+        ret=$?
+        if [ $ret -ne 0 ]; then
+            echo "Wrong Access Token provided. Failed to install service"
+        fi
+    done
+
+    sudo mkdir -p "${prefix}/${service_name}"
+    sudo cp "${service_name}.service" "/etc/systemd/system/"
+    sudo cp *.py "${prefix}/${service_name}/"
+    
+    sudo ./settings.yml.d $access_token "${prefix}/${service_name}/settings.yml"
+    sudo chmod 600 "${prefix}/${service_name}/settings.yml"
+    sudo chown root:root "${prefix}/${service_name}/settings.yml"
+    
+    enable
+}
+
+function start {
+    sudo systemctl start $service_name
+}
+
+function restart {
+    sudo systemctl restart $service_name
+}
+
+function stop {
+    sudo systemctl stop $service_name
+}
+
+function status {
+    systemctl status $service_name
+}
+
+function uninstall {
+    sudo systemctl stop $service_name
+    sudo systemctl disable $service_name
+    sudo rm -r "${prefix}/${service_name}"
+    sudo rm "/etc/systemd/system/${service_name}.service"
+    sudo systemctl daemon-reload
+    sudo systemctl reset-failed
+}
+
+function usage {
+    echo $"Usage: $0 {install [--prefix=\"prefix\"] | enable | start | restart | stop | disable | status | uninstall}"
+}
+
+case "$1" in
+    install)
+        install $2
+        ;;
+    enable)
+        enable
+        ;;
+    start)
+        start
+        ;;
+    restart)
+        restart
+        ;;
+    stop)
+        stop
+        ;;
+    disable)
+        disable
+        ;;
+    status)
+        status
+        ;;
+    uninstall)
+        uninstall
+        ;;
+    *)
+        usage
+        exit 1
+esac
