@@ -13,9 +13,8 @@ To allow the `dropbox-sync` service to connect to dropbox account an `access tok
 
 Install the `dropbox-sync` service using
 ```
-./dropbox-sync install [--prefix=<installation base path>]
+./dropbox-sync install
 ```
-The default `prefix` for installation is `/etc`.
 
 When asked paste the `access token` generated in the previous steps.
 
@@ -29,7 +28,7 @@ and check its status with
 ```
 
 ## Configuration
-Service can be configured modifing a configuration file located in `${prefix}/dropbox-sync/settings.yml`
+Service can be configured modifing a configuration file located in `/etc/dropbox-sync/settings.yml`
 
 ```yaml
 version: '1.0'
