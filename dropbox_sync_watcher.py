@@ -49,4 +49,4 @@ def main(watchdirs, logfile, log_delete=False):
 
 if __name__ == '__main__':
     settings = Settings(settings_file=os.path.join(os.path.dirname(__file__), 'settings.yml'))
-    main(watchdirs=settings.dropbox_sync.watcher.watchdirs, logfile=settings.dropbox_sync.log.file_path, log_delete=settings.nas.log.log_delete)
+    main(watchdirs=settings.dropbox_sync.watcher.watchdirs, logfile=settings.dropbox_sync.log.file_path, log_delete=settings.dropbox_sync.log.log_delete)
