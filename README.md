@@ -1,31 +1,34 @@
 # dropbox-sync
 
-Systemd compliant service for syncing with dropbox account based on inotify
+Systemd compliant service for syncing with dropbox account based on inotify.
+
+The service will watch for any changes made to files in specified directories and will do an automatic backup on dropbox account at shutdown.
 
 ## Installation and first usage
 
-To allow the `dropbox-sync` service to connect to dropbox account an `access token` must be generated; in order to generate it do the following steps:
-- go to [dropbox for developers](https://www.dropbox.com/developers)
-- sign in to `App console`
-- click on `Create app` and follow guided steps for creating a new app
-- open `Settings` page on the just new app and in the section `Generated access token` click on `Generate`
-<!--- copy the generated `access token` -->
+1) To allow the `dropbox-sync` service to connect to dropbox account an `access token` must be generated; in order to generate it do the following steps:
+   - go to [dropbox for developers](https://www.dropbox.com/developers)
+   - sign in to `App console`
+   - click on `Create app` and follow guided steps for creating a new app
+   - open `Settings` page on the just new app and in the section `Generated access token` click on `Generate`
 
-Install the `dropbox-sync` service using
-```
-./dropbox-sync install
-```
+2. Install the `dropbox-sync` service using
+    ```
+    ./dropbox-sync install
+    ```
 
-When asked paste the `access token` generated in the previous steps.
+3. When asked paste the `access token` generated in the previous steps.
 
-Start service with
-```
-./dropbox-sync start
-```
-and check its status with
-```
-./dropbox-sync status
-```
+4. Configure service following next section.
+
+5. Start service with
+    ```
+    ./dropbox-sync start
+    ```
+    and check its status with
+    ```
+    ./dropbox-sync status
+    ```
 
 ## Configuration
 Service can be configured modifing a configuration file located in `/etc/dropbox-sync/settings.yml`

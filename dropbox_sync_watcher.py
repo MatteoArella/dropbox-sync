@@ -21,8 +21,6 @@ def is_whitelisted(settings, file_path):
     return True
 
 def main(watchdirs, logfile, log_delete=False):
-    if os.path.splitext(logfile)[1] != '.csv':
-        logfile = '{}.csv'.format(logfile)
     if os.path.exists(logfile):
         os.remove(logfile)
 
@@ -33,6 +31,8 @@ def main(watchdirs, logfile, log_delete=False):
     tmp = None
     for (_, type_names, path, filename) in i.event_gen(yield_nones=False):
         filepath = os.path.join(path, filename)
+        if filepath == logfile:
+            continue
         if not is_whitelisted(settings, filepath):
             continue
         if type_names[0] in event_label:

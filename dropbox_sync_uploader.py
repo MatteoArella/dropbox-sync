@@ -2,7 +2,7 @@ import dropbox
 import os
 import re
 
-class NasUploader:
+class Uploader:
     def __init__(self, settings):
         self.client = dropbox.Dropbox(settings.dropbox_sync.sender.access_token, settings.dropbox_sync.sender.timeout)
         self.client.users_get_current_account()

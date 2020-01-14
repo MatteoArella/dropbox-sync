@@ -4,15 +4,13 @@ if __name__ == '__main__':
     from datetime import datetime
 
     from settings import Settings
-    from dropbox_sync_uploader import NasUploader
+    from dropbox_sync_uploader import Uploader
 
     settings = Settings(settings_file=os.path.join(os.path.dirname(__file__), 'settings.yml'))
     timestamp = datetime.now().strftime(settings.dropbox_sync.timestamp_format)
     logfile = settings.dropbox_sync.log.file_path
-    if os.path.splitext(logfile)[1] != '.csv':
-        logfile = '{}.csv'.format(logfile)
     
-    uploader = NasUploader(settings)
+    uploader = Uploader(settings)
 
     try:
         df = pd.read_csv(logfile)
